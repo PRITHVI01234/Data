@@ -139,17 +139,18 @@ else:
     if isinstance(st.session_state.get('filtered'), pd.DataFrame):
         # Apply conditional formatting
         def highlight_diff(row):
-            difference = row['Difference']
-            if difference > 0:
-                return ['background-color: lightgreen'] * len(row)
-            elif difference < 0:
-                return ['background-color: red'] * len(row)
+            row_color = [''] * len(row)
+            if row['Difference'] > 0:
+                row_color = ['background-color: lightgreen'] * len(row)
+            elif row['Difference'] < 0:
+                row_color = ['background-color: red'] * len(row)
+            
             if row['2023'] == 0:
                 row_color = ['background-color: green'] * len(row)
             if row['2024'] == 0:
                 row_color = ['background-color: blue'] * len(row)
-            else:
-                return [''] * len(row)
+
+            return row_color
 
         styled_df = st.session_state.filtered.style.apply(highlight_diff, axis=1)
         st.dataframe(styled_df, use_container_width=True)
