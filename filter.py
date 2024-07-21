@@ -144,6 +144,10 @@ else:
                 return ['background-color: lightgreen'] * len(row)
             elif difference < 0:
                 return ['background-color: red'] * len(row)
+            if row['2023'] == 0:
+                row_color = ['background-color: green'] * len(row)
+            if row['2024'] == 0:
+                row_color = ['background-color: blue'] * len(row)
             else:
                 return [''] * len(row)
 
