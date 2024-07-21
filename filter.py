@@ -51,7 +51,7 @@ else:
     # Define functions to filter data
     def filter_form4(data):
         filtered = data.copy()
-        bound = st.container()
+        bound = st.container(border=True)
         left, check1, right = bound.columns([0.4, 0.135, 0.3])
         
         college_name = left.text_input('Enter College Name', placeholder='Enter College Name')
@@ -80,7 +80,7 @@ else:
 
     def filter_form5(data):
         filtered = data.copy()
-        bound = st.container()
+        bound = st.container(border=True)
         _college_name, sw_toggle, _college_code = bound.columns([0.92, 0.3, 0.8])
 
         college_name = _college_name.text_input('Enter College Name', placeholder='Enter College Name')
