@@ -173,6 +173,21 @@ else:
           )
 
       return result
+    
+    def color_row(row):
+      row_color = [''] * len(row)
+      if row['Difference'] > 0:
+          row_color = ['background-color: lightgreen'] * len(row)
+      elif row['Difference'] < 0:
+          row_color = ['background-color: red'] * len(row)
+      
+      if row['2023'] == 0:
+          row_color = ['background-color: green'] * len(row)
+      if row['2024'] == 0:
+          row_color = ['background-color: blue'] * len(row)
+
+      return row_color
+
 
 
     if not st.session_state.get('a') and not st.session_state.get('b'):
@@ -270,6 +285,8 @@ else:
 
 
     if type(st.session_state.get('filtered')) == pd.DataFrame:
-      st.dataframe(st.session_state.filtered,use_container_width=True)
+      #st.dataframe(st.session_state.filtered,use_container_width=True)
+      styled_df = st.session_state.filtered.style.apply(color_row, axis=1)
+      st.dataframe(styled_df, use_container_width=True)
   except:
     st.warning("Uploads All Files and Commit properly Before Viewing")
