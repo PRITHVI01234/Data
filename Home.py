@@ -18,42 +18,57 @@ background_generator = BackgroundCSSGenerator(img1_path, img2_path)
 page_bg_img = background_generator.generate_background_css()
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
-if not st.session_state.get('years'):
-  st.session_state.years = {}
+# Login function
+def login():
+    st.title("Login")
+    username = st.text_input("Username")
+    password = st.text_input("Password", type="password")
+    if st.button("Login"):
+        if username == "CIT-CDC" and password == "CIT2024@":
+            st.session_state["authenticated"] = True
+            st.experimental_rerun()
+        else:
+            st.error("Invalid username or password")
 
-st.set_page_config(page_title='TNEA Compare',layout="wide")
+# Check if the user is authenticated
+if "authenticated" not in st.session_state:
+    st.session_state["authenticated"] = False
 
-st.title('Seat Matrix Comparison PDF Uploads')
+# Display login page if not authenticated
+if not st.session_state["authenticated"]:
+    login()
+else:
+    if not st.session_state.get('years'):
+        st.session_state.years = {}
 
-col1, col2 = st.columns(2)
+    st.title('Seat Matrix Comparison PDF Uploads')
 
-with col1:
-  file_uploader('Upload SeatMatrix **{}** th Year', 'a', 'N-1')
-with col2:
-  file_uploader('Upload SeatMatrix **{}** th Year', 'b', 'N')
+    col1, col2 = st.columns(2)
 
-def rename_first_four_columns(df):
+    with col1:
+        file_uploader('Upload SeatMatrix **{}** th Year', 'a', 'N-1')
+    with col2:
+        file_uploader('Upload SeatMatrix **{}** th Year', 'b', 'N')
 
-    new_column_names = ['College Code', 'College Name', 'Branch Code', 'Branch Name']
-    current_columns = df.columns.tolist()
-    rename_mapping = {current_columns[i]: new_column_names[i] for i in range(min(len(current_columns), 4))}
-    df = df.rename(columns=rename_mapping)
-    
-    return df
+    def rename_first_four_columns(df):
+        new_column_names = ['College Code', 'College Name', 'Branch Code', 'Branch Name']
+        current_columns = df.columns.tolist()
+        rename_mapping = {current_columns[i]: new_column_names[i] for i in range(min(len(current_columns), 4))}
+        df = df.rename(columns=rename_mapping)
+        
+        return df
 
-def execute_script():
+    def execute_script():
+        df1 = pd.read_excel(r"Inputs/a.xlsx")
+        df2 = pd.read_excel(r"Inputs/b.xlsx")
+        df1 = rename_first_four_columns(df1)
+        df2 = rename_first_four_columns(df2)
+        df1.to_excel("Inputs/a.xlsx", index=False)
+        df2.to_excel("Inputs/b.xlsx", index=False)
 
-    df1 = pd.read_excel(r"Inputs/a.xlsx")
-    df2 = pd.read_excel(r"Inputs/b.xlsx")
-    df1 = rename_first_four_columns(df1)
-    df2 = rename_first_four_columns(df2)
-    df1.to_excel("Inputs/a.xlsx", index=False)
-    df2.to_excel("Inputs/b.xlsx", index=False)
+        st.success("Changes have been made and files have been updated!")
 
-    st.success("Changes have been made and files have been updated!")
-
-
-st.sidebar.subheader(":rainbow-background[Note:]")
-st.sidebar.success("**Upload both files, enter commit, and press 'Make Changes' to process.**")
-if st.sidebar.button('Make Changes'):
-    execute_script()
+    st.sidebar.subheader(":rainbow-background[Note:]")
+    st.sidebar.success("**Upload both files, enter commit, and press 'Make Changes' to process.**")
+    if st.sidebar.button('Make Changes'):
+        execute_script()
