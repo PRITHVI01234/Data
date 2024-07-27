@@ -18,25 +18,25 @@ background_generator = BackgroundCSSGenerator(img1_path, img2_path)
 page_bg_img = background_generator.generate_background_css()
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
-# Login function
-def login():
-    st.title("Login")
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
-    if st.button("Login"):
-        if username == "CIT-CDC" and password == "CIT2024@":
-            st.session_state["authenticated"] = True
+# Function to check login credentials
+def check_credentials(username, password):
+    return username == "CIT-CDC" and password == "CIT2024@"  # Replace with your credentials
+
+# Initialize session state for login
+if 'logged_in' not in st.session_state:
+    st.session_state.logged_in = False
+
+# Login form
+if not st.session_state.logged_in:
+    st.title('Login')
+    username = st.text_input('Username')
+    password = st.text_input('Password', type='password')
+    if st.button('Login'):
+        if check_credentials(username, password):
+            st.session_state.logged_in = True
             st.experimental_rerun()
         else:
-            st.error("Invalid username or password")
-
-# Check if the user is authenticated
-if "authenticated" not in st.session_state:
-    st.session_state["authenticated"] = False
-
-# Display login page if not authenticated
-if not st.session_state["authenticated"]:
-    login()
+            st.error('Invalid username or password')
 else:
     if not st.session_state.get('years'):
         st.session_state.years = {}
@@ -55,7 +55,6 @@ else:
         current_columns = df.columns.tolist()
         rename_mapping = {current_columns[i]: new_column_names[i] for i in range(min(len(current_columns), 4))}
         df = df.rename(columns=rename_mapping)
-        
         return df
 
     def execute_script():
@@ -65,7 +64,6 @@ else:
         df2 = rename_first_four_columns(df2)
         df1.to_excel("Inputs/a.xlsx", index=False)
         df2.to_excel("Inputs/b.xlsx", index=False)
-
         st.success("Changes have been made and files have been updated!")
 
     st.sidebar.subheader(":rainbow-background[Note:]")
