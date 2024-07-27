@@ -1,8 +1,21 @@
 import pandas as pd
 import streamlit as st
 from Processors import SeatMatrix
+from background import BackgroundCSSGenerator
 
-st.set_page_config(layout='wide', page_title='TNEA Compare')
+# Set up Streamlit page configuration
+st.set_page_config(
+    page_title="TNEA Comparison",
+    page_icon="🔍",
+    layout="wide"
+)
+
+# Define paths for background images
+img1_path = r"Main_bg.jpg"
+img2_path = r"Sidebar_bg.jpeg"
+background_generator = BackgroundCSSGenerator(img1_path, img2_path)
+page_bg_img = background_generator.generate_background_css()
+st.markdown(page_bg_img, unsafe_allow_html=True)
 
 communities = ['OC', 'BC', 'BCM', 'MBC', 'SC', 'SCA', 'ST']
 
