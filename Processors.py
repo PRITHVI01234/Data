@@ -630,10 +630,10 @@ class SeatMatrix:
       elif '%' not in col and val[col].dtype != object and 'Rank' not in col:
         val[col] = val[col].astype(int)
     
-    os.makedirs('./years', exist_ok=True)
-    os.makedirs(f'./years/{st.session_state.year}', exist_ok=True)
-    os.makedirs(f'./years/{st.session_state.year}/Forms', exist_ok=True)
-    val.to_excel(f'./years/{st.session_state.year}/Forms/Form 1.xlsx', index=False)
+
+    os.makedirs(f'./{st.session_state.year}', exist_ok=True)
+    os.makedirs(f'./{st.session_state.year}/Forms', exist_ok=True)
+    val.to_excel(f'./{st.session_state.year}/Forms/Form 1.xlsx', index=False)
   
   def form2(self, rounds, rank_list):
     import numpy as np
@@ -679,7 +679,7 @@ class SeatMatrix:
 
     val = val[std_cols]
     
-    val.to_excel(f'./years/{st.session_state.year}/Forms/Form 2.xlsx', index=False)
+    val.to_excel(f'./{st.session_state.year}/Forms/Form 2.xlsx', index=False)
 
   def form3(self, rounds, rank_list):
     import numpy as np
@@ -709,7 +709,7 @@ class SeatMatrix:
         lambda x : x.assign(TEMP=0)
     ).reset_index(level=[4], drop=True).drop(columns=['College Code', 'College Name', 'Branch Code', 'Branch Name', 'TEMP']).reset_index()
 
-    val.to_excel(f'./years/{st.session_state.year}/Forms/Form 3.xlsx', index=False)
+    val.to_excel(f'./{st.session_state.year}/Forms/Form 3.xlsx', index=False)
 
 def Process(options):
   import time
