@@ -18,9 +18,8 @@ background_generator = BackgroundCSSGenerator(img1_path, img2_path)
 page_bg_img = background_generator.generate_background_css()
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
-# Function to check login credentials
 def check_credentials(username, password):
-    return username == "CIT-CDC" and password == "CIT2024@"  # Replace with your credentials
+    return username == st.secrets['username'] and password == st.secrets['password']
 
 # Initialize session state for login
 if 'logged_in' not in st.session_state:
