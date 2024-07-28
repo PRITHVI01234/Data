@@ -289,7 +289,7 @@ else:
       styled_df = st.session_state.filtered.style.apply(color_row, axis=1)
       st.dataframe(styled_df, use_container_width=True)
       csv = st.session_state.filtered.to_csv(index=False)
-            st.download_button(
+      st.download_button(
                 label="Download data as CSV",
                 data=csv,
                 file_name='filtered_data.csv',
